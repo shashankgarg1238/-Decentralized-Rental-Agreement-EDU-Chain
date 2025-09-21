@@ -5,8 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NeoFashion - Futuristic Clothing Store</title>
     <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.10.0/dist/web3.min.js"></script>
+    <style>
+        /* Fallback fonts in case Google Fonts is blocked */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+        
+        /* Fallback if Google Fonts fail to load */
+        body {
+            font-family: 'Exo 2', 'Arial', 'Helvetica', sans-serif;
+        }
+        .logo h1 {
+            font-family: 'Orbitron', 'Courier New', monospace;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.10.0/dist/web3.min.js" onerror="loadLocalWeb3()"></script>
+    <script>
+        function loadLocalWeb3() {
+            console.log('Loading local Web3 fallback...');
+            // For demo purposes, create a mock Web3 object
+            if (typeof Web3 === 'undefined') {
+                window.Web3 = function() {
+                    return {
+                        utils: {
+                            toWei: function(amount, unit) {
+                                return amount + ' ' + unit;
+                            },
+                            fromWei: function(amount, unit) {
+                                return amount.replace(' ' + unit, '');
+                            }
+                        }
+                    };
+                };
+            }
+        }
+    </script>
 </head>
 <body>
     <div class="container">
