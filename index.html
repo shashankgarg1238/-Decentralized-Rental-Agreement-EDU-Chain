@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NeoFashion - Futuristic Clothing Store</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Fallback fonts in case Google Fonts is blocked */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+        
+        /* Fallback if Google Fonts fail to load */
+        body {
+            font-family: 'Exo 2', 'Arial', 'Helvetica', sans-serif;
+        }
+        .logo h1 {
+            font-family: 'Orbitron', 'Courier New', monospace;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.10.0/dist/web3.min.js" onerror="loadLocalWeb3()"></script>
+    <script>
+        function loadLocalWeb3() {
+            console.log('Loading local Web3 fallback...');
+            // For demo purposes, create a mock Web3 object
+            if (typeof Web3 === 'undefined') {
+                window.Web3 = function() {
+                    return {
+                        utils: {
+                            toWei: function(amount, unit) {
+                                return amount + ' ' + unit;
+                            },
+                            fromWei: function(amount, unit) {
+                                return amount.replace(' ' + unit, '');
+                            }
+                        }
+                    };
+                };
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="nav-container">
+                <div class="logo">
+                    <h1>NeoFashion</h1>
+                    <span class="tagline">Future Wear Today</span>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-section="products">Products</button>
+                    <button class="nav-btn" data-section="cart">Cart (<span id="cart-count">0</span>)</button>
+                    <button class="nav-btn" data-section="orders">Orders</button>
+                </nav>
+                <div class="wallet-section">
+                    <button id="connect-wallet" class="connect-btn">Connect Wallet</button>
+                    <div id="wallet-info" class="wallet-info" style="display: none;">
+                        <span id="wallet-address"></span>
+                        <span id="wallet-balance"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Products Section -->
+            <section id="products-section" class="section active">
+                <div class="section-header">
+                    <h2>Futuristic Collections</h2>
+                    <p>Discover the next generation of fashion technology</p>
+                </div>
+                <div class="filter-bar">
+                    <select id="category-filter">
+                        <option value="all">All Categories</option>
+                        <option value="Jackets">Jackets</option>
+                        <option value="Pants">Pants</option>
+                        <option value="Shirts">Shirts</option>
+                        <option value="Shoes">Shoes</option>
+                        <option value="Accessories">Accessories</option>
+                    </select>
+                    <div class="sort-options">
+                        <select id="sort-options">
+                            <option value="name">Sort by Name</option>
+                            <option value="price-low">Price: Low to High</option>
+                            <option value="price-high">Price: High to Low</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="products-grid" class="products-grid">
+                    <!-- Products will be loaded here -->
+                </div>
+                <div id="loading" class="loading">
+                    <div class="spinner"></div>
+                    <p>Loading products...</p>
+                </div>
+            </section>
+
+            <!-- Cart Section -->
+            <section id="cart-section" class="section">
+                <div class="section-header">
+                    <h2>Your Cart</h2>
+                    <button id="clear-cart" class="danger-btn">Clear Cart</button>
+                </div>
+                <div id="cart-items" class="cart-items">
+                    <!-- Cart items will be loaded here -->
+                </div>
+                <div id="cart-empty" class="empty-state">
+                    <div class="empty-icon">🛒</div>
+                    <h3>Your cart is empty</h3>
+                    <p>Add some futuristic items to get started!</p>
+                </div>
+                <div id="cart-total" class="cart-total" style="display: none;">
+                    <div class="total-breakdown">
+                        <div class="total-line">
+                            <span>Subtotal:</span>
+                            <span id="subtotal">0 ETH</span>
+                        </div>
+                        <div class="total-line total">
+                            <span>Total:</span>
+                            <span id="total">0 ETH</span>
+                        </div>
+                    </div>
+                    <button id="purchase-btn" class="purchase-btn">Purchase Now</button>
+                </div>
+            </section>
+
+            <!-- Orders Section -->
+            <section id="orders-section" class="section">
+                <div class="section-header">
+                    <h2>Order History</h2>
+                </div>
+                <div id="orders-list" class="orders-list">
+                    <!-- Orders will be loaded here -->
+                </div>
+                <div id="orders-empty" class="empty-state">
+                    <div class="empty-icon">📦</div>
+                    <h3>No orders yet</h3>
+                    <p>Your purchase history will appear here</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Product Modal -->
+        <div id="product-modal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div class="modal-body">
+                    <div class="product-image">
+                        <img id="modal-image" src="" alt="">
+                    </div>
+                    <div class="product-details">
+                        <h2 id="modal-title"></h2>
+                        <p id="modal-description"></p>
+                        <div class="product-meta">
+                            <span class="category" id="modal-category"></span>
+                            <span class="stock" id="modal-stock"></span>
+                        </div>
+                        <div class="price-section">
+                            <span class="price" id="modal-price"></span>
+                        </div>
+                        <div class="quantity-selector">
+                            <label for="modal-quantity">Quantity:</label>
+                            <div class="quantity-controls">
+                                <button class="qty-btn" id="qty-decrease">-</button>
+                                <input type="number" id="modal-quantity" value="1" min="1">
+                                <button class="qty-btn" id="qty-increase">+</button>
+                            </div>
+                        </div>
+                        <button id="add-to-cart-btn" class="add-to-cart-btn">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification System -->
+        <div id="notification-container" class="notification-container"></div>
+
+        <!-- Loading Overlay -->
+        <div id="loading-overlay" class="loading-overlay" style="display: none;">
+            <div class="loading-spinner">
+                <div class="spinner-large"></div>
+                <p id="loading-text">Processing...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

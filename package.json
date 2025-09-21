@@ -1,0 +1,39 @@
+{
+  "name": "neofashion-futuristic-clothing-store",
+  "version": "1.0.0",
+  "description": "A decentralized futuristic clothing store with blockchain integration, cart functionality, and purchase capabilities",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 3000 -c-1",
+    "dev": "npx http-server -p 3000 -c-1 -o",
+    "build": "echo 'No build process needed for static site'",
+    "deploy": "echo 'Deploy the contract and update CONTRACT_ADDRESS in app.js'"
+  },
+  "keywords": [
+    "blockchain",
+    "ethereum",
+    "solidity",
+    "web3",
+    "ecommerce",
+    "clothing",
+    "futuristic",
+    "decentralized",
+    "dapp"
+  ],
+  "author": "NeoFashion Team",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "dependencies": {
+    "web3": "^1.10.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shashankgarg1238/-Decentralized-Rental-Agreement-EDU-Chain"
+  },
+  "homepage": ".",
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
